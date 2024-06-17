@@ -422,9 +422,10 @@ PostgreSQL can be accessed via port 5432 on the following DNS names from within 
   ```
 - Kafka
 
-  ```powershell
+```powershell
  helm install kafka bitnami/kafka --set broker.automountServiceAccountToken=true --set zookeeper.enabled=false --set replicaCount=1 --set externalZookeeper.servers=zookeeper.ecart.svc.cluster.local --set externalAccess.enabled=true --set externalAccess.service.type=LoadBalancer --set externalAccess.autoDiscovery.enabled=true --set rbac.create=true --set autoCreateTopicsEnable=true --set deleteTopicEnable=true
  -n ecart
+
   # Kafka can be accessed by consumers via port 9092 on the following DNS name from within your cluster:
 
    # kafka.ecart.svc.cluster.local
@@ -433,12 +434,13 @@ PostgreSQL can be accessed via port 5432 on the following DNS names from within 
 
    # kafka-0.kafka-headless.ecart.svc.cluster.local:9092
    #  Kafka Brokers port: 9094
+
   ```
 - Create Kafka topic
 
-  ```powershell
+```powershell
   kubectl --namespace ecart exec -it kafka-0 -- kafka-topics.sh --create --topic mytopic --replication-factor 1 --partitions 1 --bootstrap-server kafka.ecart.svc.cluster.local:9092
-  ```  
+```  
   security.protocol=SASL_PLAINTEXT
 sasl.mechanism=SCRAM-SHA-256
 sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required \
@@ -495,7 +497,7 @@ openssl req  -nodes -new -x509  -keyout ca.key -out ca.crt
 ## Import Issuer certificate to `Trusted Root Certificate Authorities` 
 ```powershell
 # Execute on PowerShell in admin mode
-Import-Certificate -FilePath C:\quotes\k8\certs\ca.crt -CertStoreLocation 'Cert:\LocalMachine\Root'
+Import-Certificate -FilePath ca.crt -CertStoreLocation 'Cert:\LocalMachine\Root'
 ```
 ## Setup shared storage for Quote
 ```powershell
